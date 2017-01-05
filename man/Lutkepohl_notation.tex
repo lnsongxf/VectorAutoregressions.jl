@@ -1,0 +1,46 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{booktabs}
+\usepackage{parskip}
+
+
+\begin{document}
+\textbf{Notation from Lutkepohl 2005:}
+
+(Section 2.1.1., p.13)
+
+The object of interest in the following is the VAR($ p $) model (VAR model of order $ p $),
+\[
+	y_t = \nu + A_1 \, y_{t-1} + \cdots + A_p \, y_{t-p} + u_t, \quad t = 0, \pm 1, \pm 2, \dots,
+\]
+where 
+\begin{itemize}
+	\item $ y_t = (y_{1t}, \dots, y_{Kt})' $ is a $ (K \times 1) $ random vector,
+	\item the $ A_i $ are fixed $ (K \times K) $ coefficient matrices,
+	\item $ \nu = (\nu_1, \dots , \nu_K)' $ is a fixed $ (K \times 1) $ vector of intercept terms allowing for the possibility of a nonzero mean $ E(y_t) $,
+	\item $ u_t = (u_{1t}, \dots, u_{Kt})' $ is a $ K $-dimensional white noise or innovation process: 
+	\begin{itemize}
+		\item $ E(u_t) = 0 $,
+		\item $ E(u_t u_t') = \Sigma_u $,
+		\item $ E(u_t u_s') = 0 $ for $ s \neq t $,
+		\item The covariance matrix $ \Sigma_u $ is assumed to be nonsingular if not otherwise stated.
+	\end{itemize}
+\end{itemize}
+
+It is assumed that a time series $ y_1, \dots, y_T $ of the $ y $ variables is available, that is, we have a sample of size $ T $ for each of the $ K $ variables for the same sample period. In addition, $ p $ presample values for each variable, $ y_{−p+1}, \dots, y_0 $, are assumed to be available. Partitioning a multiple time series into sample and presample values is convenient in order to simplify the notation. 
+
+\begin{align*}
+	Y   & :=  (y_1, \dots, y_T)      & (K \times T)        \\
+	B   & :=    (v, A_1, \dots, A_p) & (K \times (Kp + 1)) \\
+	Z_t & :=  	\left[ \begin{array}{c}
+						1 \\
+						y_t \\
+						\vdots \\
+						y_{t-p+1}
+					\end{array} \right]                       & ((Kp + 1) \times 1) \\
+\end{align*}
+
+\end{document}
