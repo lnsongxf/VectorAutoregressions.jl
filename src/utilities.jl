@@ -1,3 +1,45 @@
+function varstable(v::VAR; print = true)
+    B = v.B
+    p = v.lags
+    constant = v.constant
+    trend = v.trend
+    startidx = constant + trend + 1
+    A = B[startidx:end, :]
+    Acomp = comp_matrix(A, p)
+    eig_Acomp = eigs(Acomp)
+    E = eig_Acomp[1]
+    Emod = abs(E)
+
+    if print
+        @printf "==============================================\n"
+        @printf "        Eigenvalues       Modulus \n"
+        @printf "==============================================\n"
+        for i = 1:length(E)
+            if real(E[i]) > 0 && imag(E[i]) >= 0
+                @printf "     %5.3f +   %5.3fi      %5.3f \n" real(E[i]) imag(E[i]) Emod[i]
+            elseif real(E[i]) > 0 && imag(E[i]) < 0
+                @printf "     %5.3f +   %5.3fi      %5.3f \n" real(E[i]) imag(E[i]) Emod[i]
+            elseif real(E[i]) < 0 && imag(E[i]) >= 0
+                @printf "    %5.3f +   %5.3fi      %5.3f \n" real(E[i]) imag(E[i]) Emod[i]
+            else
+                @printf "    %5.3f +  %5.3fi      %5.3f \n" real(E[i]) imag(E[i]) Emod[i]
+            end
+        end
+        @printf "==============================================\n"
+
+        test = (Emod .< 1)
+        if all(test)
+            @printf "All eigenvalues lie inside the unit circle. \n"
+            @printf "VAR satisfies the stability condition. \n\n"
+        else
+            @printf "At least one eigenvalue lies outside the unit circle. \n"
+            @printf "VAR does not satisfy the stability condition. \n\n"
+        end
+    end
+
+    return (E, Emod)
+end
+
 """
     loglik(v::VAR)
 

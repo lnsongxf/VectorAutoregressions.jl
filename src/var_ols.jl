@@ -33,13 +33,6 @@ immutable VAR
 
 end # VAR type definition
 
-varnames(v::VectorAutoregression.VAR) = v.varnames
-coef(v::VectorAutoregression.VAR) = v.B
-residuals(v::VectorAutoregression.VAR) = v.U
-vcov(v::VectorAutoregression.VAR) = v.SigmaU
-lags(v::VectorAutoregression.VAR) = v.lags
-
-
 
 """
     var_ols(datamat::Matrix, p::Int; constant::Bool=true, trend::Bool=false)
@@ -54,7 +47,7 @@ function var_ols(datamat::Matrix, p::Int; constant::Bool=true, trend::Bool=false
     Y = datamat[p+1:end, :]
     B = (Z'*Z)\(Z'*Y) # each column corresponds to an equation
     U = Y - Z*B
-    SigmaU = (U'*U)/(nobs - nparam)
+    SigmaU = (U'*U)/(T - nparam)
     SigmaB = kron(SigmaU, inv(Z'*Z))  # following Lutkepohl(2005) p.80
     seB = sqrt(reshape(diag(SigmaB), nparam, K))
     return nobs, K, T, Z, B, U, SigmaU, SigmaB, seB

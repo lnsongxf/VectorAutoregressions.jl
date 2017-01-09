@@ -51,3 +51,15 @@ function rhs_matrix{T<:DataFrame}(X::T, p::Int, constant::Bool, trend::Bool)
     X2 = Matrix(X)
     return rhs_matrix(X2, p, constant, trend)
 end
+
+"""
+    comp_matrix(A::Matrix, p)
+
+Construct the companion matrix for `A`.
+"""
+function comp_matrix(A::Matrix, p)
+    K = size(A, 2)
+    I = [eye(K*(p-1)) zeros(K*(p-1), K)]
+    Acomp = sparse(vcat(A', I))
+    return Acomp
+end

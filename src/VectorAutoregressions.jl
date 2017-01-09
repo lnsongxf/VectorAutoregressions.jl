@@ -17,11 +17,13 @@ export
 #   Utilities
     lag_matrix,
     rhs_matrix,
+    comp_matrix,
+    varstable,
     loglik
 
+include("var_ols.jl")
 include("matrix_utilities.jl")
 include("utilities.jl")
-include("var_ols.jl")
 
 # include("var_bayes.jl")
 # include("var_mf_ols.jl")

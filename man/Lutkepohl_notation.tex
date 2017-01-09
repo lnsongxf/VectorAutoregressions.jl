@@ -30,17 +30,44 @@ where
 	\end{itemize}
 \end{itemize}
 
-It is assumed that a time series $ y_1, \dots, y_T $ of the $ y $ variables is available, that is, we have a sample of size $ T $ for each of the $ K $ variables for the same sample period. In addition, $ p $ presample values for each variable, $ y_{−p+1}, \dots, y_0 $, are assumed to be available. Partitioning a multiple time series into sample and presample values is convenient in order to simplify the notation. 
+\clearpage
+
+\textbf{Multivariate Least Squares Estimation}
+
+(Section 3.2.1, p.70)
+
+It is assumed that a time series $ y_1, \dots, y_T $ of the $ y $ variables is available, that is, we have a sample of size $ T $ for each of the $ K $ variables for the same sample period. In addition, $ p $ presample values for each variable, $ y_{-p+1}, \dots, y_0 $, are assumed to be available. Partitioning a multiple time series into sample and presample values is convenient in order to simplify the notation. 
 
 \begin{align*}
 	Y   & :=  (y_1, \dots, y_T)      & (K \times T)        \\
 	B   & :=    (v, A_1, \dots, A_p) & (K \times (Kp + 1)) \\
 	Z_t & :=  	\left[ \begin{array}{c}
-						1 \\
-						y_t \\
-						\vdots \\
-						y_{t-p+1}
-					\end{array} \right]                       & ((Kp + 1) \times 1) \\
+		    1     \\
+		   y_t    \\
+		 \vdots   \\
+		y_{t-p+1}
+	\end{array} \right]                       & ((Kp + 1) \times 1) \\
+	Z & := (Z_0, \dots, Z_{T-1}) & ((Kp + 1) \times T) \\
+	U   & :=  (u_1, \dots, u_T)      & (K \times T)        \\
+	\mathrm{y} & := \mathrm{vec}(Y) & (KT \times 1) \\
+	\beta  & := \mathrm{vec}(B) & ((K^2p + K) \times 1) \\
+	\mathrm{b} & := \mathrm{vec}(B') & ((K^2p + K) \times 1) \\
+	\mathrm{u} & := \mathrm{vec}(U)  & (KT \times 1) \\
 \end{align*}
+
+The OLS estimate of $ B $ is given by (eqn.3.2.10, p.72):
+\[
+	\widehat{B} = Y Z' (Z Z')^{-1}.
+\]
+
+An unbiased estimator for $ \Sigma_u $ is (eqn.3.2.19, p.75):
+\[
+	\widehat{\Sigma}_u = \frac{1}{T - Kp - 1} \widehat{U} \widehat{U}'.
+\]
+
+Estimated standard errors of the coefficient estimates are the square roots of the diagonal elements of (eqn.3.2.21, p.77):
+\[
+	(Z Z')^{-1} \otimes \widehat{\Sigma}_u
+\]
 
 \end{document}
