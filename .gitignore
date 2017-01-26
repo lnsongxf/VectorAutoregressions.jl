@@ -1,6 +1,7 @@
 .ipynb_checkpoints
 *.ipynb
 
+*.pdf
 *.log
 *.aux
 *.bbl
@@ -8,4 +9,3 @@
 *.blg
 *.gz
 *.DS_Store
-

@@ -24,13 +24,6 @@ immutable VAR
         end
         new(datamat, lags, constant, trend, varnames, Z, B, U, SigmaU, SigmaB, seB)
     end
-
-    function VAR(datadf::DataFrame, lags::Int, constant::Bool, trend::Bool)
-        datamat = Matrix(datadf)
-        varnames = [string(i) for i in names(datadf)]
-        VAR(datamat, lags, constant, trend, varnames)
-    end
-
 end # VAR type definition
 
 
