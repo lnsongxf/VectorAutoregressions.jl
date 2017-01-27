@@ -4,7 +4,7 @@ module VectorAutoregressions
 
 using  DataFrames
 using  Distributions
-using  Plots
+# using  Plots
 import Base: show
 
 export
@@ -19,7 +19,8 @@ export
     rhs_matrix,
     comp_matrix,
     varstable,
-    loglik
+    loglik,
+    criteria
 
 include("var_ols.jl")
 include("matrix_utilities.jl")

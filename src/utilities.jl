@@ -53,3 +53,23 @@ function loglik(v::VAR)
     LL = -(T/2.0)*(logdet(SigmaU) + K*log(2*pi) + K)
     return LL
 end
+
+"""
+    criteria(v::VAR)
+
+Calculate lag selection criteria for [`VAR`](@ref) instance `v`.
+"""
+function criteria(v::VAR)
+    p, SigmaU = v.lags, v.SigmaU
+    Traw, K = size(v.datamat)
+    T = Traw - p
+
+    # AIC = log(det(Sigma_u)) + (2/T)*(# of parameters)
+    AIC = log(det(SigmaU)) + (2.0/T)*(K*p + 1.0)*K
+    # SIC
+    SIC = log(det(SigmaU)) + (log(T)/T)*(K*p + 1.0)*K
+    # HQIC
+    HQIC = log(det(SigmaU)) + 2.0*(log(log(T))/T)*(K*p + 1.0)*K
+
+    return Dict("AIC" => AIC, "SIC" => SIC, "HQIC" => HQIC)
+end

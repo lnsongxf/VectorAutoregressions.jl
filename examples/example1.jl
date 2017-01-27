@@ -15,3 +15,4 @@ varnames = names(e1data2)[2:end]
 
 varout = VAR(datamat, lags, constant, trend)
 E, Emod = varstable(varout)
+c = criteria(varout)
