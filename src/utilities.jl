@@ -63,13 +63,17 @@ function criteria(v::VAR)
     p, SigmaU = v.lags, v.SigmaU
     Traw, K = size(v.datamat)
     T = Traw - p
+    # MLE estimate of SigmaU
+    Sigma = ((T - K*p - 1)/T)*SigmaU
 
+    # FPE
+    FPE = det(Sigma)*(((T + K*p + 1)/(T - K*p - 1))^K)
     # AIC = log(det(Sigma_u)) + (2/T)*(# of parameters)
-    AIC = log(det(SigmaU)) + (2.0/T)*(K*p + 1.0)*K
-    # SIC
-    SIC = log(det(SigmaU)) + (log(T)/T)*(K*p + 1.0)*K
+    AIC = log(det(Sigma)) + (2.0*p*K^2)/T
     # HQIC
-    HQIC = log(det(SigmaU)) + 2.0*(log(log(T))/T)*(K*p + 1.0)*K
+    HQIC = log(det(Sigma)) + ((2.0*p*K^2)/T)*log(log(T))
+    # SIC
+    SIC = log(det(Sigma)) + ((p*K^2)/T)*log(T)
 
-    return Dict("AIC" => AIC, "SIC" => SIC, "HQIC" => HQIC)
+    return Dict("FPE" => FPE, "AIC" => AIC, "SIC" => SIC, "HQIC" => HQIC)
 end
