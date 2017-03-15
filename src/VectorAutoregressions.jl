@@ -20,7 +20,8 @@ export
     comp_matrix,
     varstable,
     loglik,
-    criteria
+    criteria,
+    varselect
 
 include("var_ols.jl")
 include("matrix_utilities.jl")
