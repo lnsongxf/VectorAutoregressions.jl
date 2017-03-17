@@ -10,6 +10,7 @@ import Base: show
 export
 #   Types
     VAR,
+    ResidualCorrelationTests,
 
 #   Estimation functions
     var_ols,
@@ -23,9 +24,11 @@ export
     criteria,
     varselect
 
+
 include("var_ols.jl")
 include("matrix_utilities.jl")
 include("utilities.jl")
+include("diagnostics.jl")
 
 # include("var_bayes.jl")
 # include("var_mf_ols.jl")

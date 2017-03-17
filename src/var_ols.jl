@@ -5,8 +5,10 @@ Fields:
 ---
 """
 immutable VAR
-    datamat::Matrix{Float64}
-    lags::Int
+    Y::Matrix{Float64}
+    K::Int
+    T::Int
+    p::Int
     constant::Bool
     trend::Bool
     varnames::Vector{String}
@@ -14,32 +16,31 @@ immutable VAR
     B::Matrix{Float64}
     U::Matrix{Float64}
     SigmaU::Matrix{Float64}
-    SigmaB::Matrix{Float64}
     seB::Matrix{Float64}
     LL::Float64
 
-    function VAR(datamat::Matrix{Float64}, lags::Int, constant::Bool, trend::Bool, varnames::Vector{String}=[""])
-        nobs, K, T, Z, B, U, SigmaU, SigmaB, seB = var_ols(datamat, lags, constant=constant, trend=trend)
+    function VAR(Y::Matrix{Float64}, p::Int, constant::Bool, trend::Bool, varnames::Vector{String}=[""])
+        nobs, K, T, Z, B, U, SigmaU, SigmaB, seB = var_ols(Y, p, constant, trend)
         if varnames == [""]
             varnames = [string("Y$i") for i in 1:K]
         end
         LL = loglik(T, K, SigmaU)
-        new(datamat, lags, constant, trend, varnames, Z, B, U, SigmaU, SigmaB, seB, LL)
+        new(Y, K, T, p, constant, trend, varnames, Z, B, U, SigmaU, seB, LL)
     end
 end # VAR type definition
 
 
 """
-    var_ols(datamat::Matrix, p::Int; constant::Bool=true, trend::Bool=false)
+    var_ols(Y::Matrix, p::Int; constant::Bool=true, trend::Bool=false)
 
 Estimate a VAR using OLS. Used as part of the inner constructor for the [`VAR`](@ref) tyoe.
 """
-function var_ols(datamat::Matrix{Float64}, p::Int; constant::Bool=true, trend::Bool=false)
-    nobs, K = size(datamat)
+function var_ols(Y::Matrix{Float64}, p::Int, constant::Bool, trend::Bool)
+    nobs, K = size(Y)
     T = nobs - p
-    Z = rhs_matrix(datamat, p, constant, trend)
+    Z = rhs_matrix(Y, p, constant, trend)
     nparam = size(Z, 2)
-    Y = datamat[p+1:end, :]
+    Y = Y[p+1:end, :]
     B = (Z'*Z)\(Z'*Y) # each column corresponds to an equation
     U = Y - Z*B
     SigmaU = (U'*U)/(T - nparam)

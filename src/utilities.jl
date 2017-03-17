@@ -1,6 +1,6 @@
 function varstable(v::VAR; print = true)
     B = v.B
-    p = v.lags
+    p = v.p
     constant = v.constant
     trend = v.trend
     startidx = constant + trend + 1
@@ -72,16 +72,16 @@ function criteria(T, K, p, SigmaU)
 end
 
 """
-    varselect(datamat, maxlag, constant, trend; print = false)
+    varselect(Y, maxlag, constant, trend; print = false)
 
 Calculate optimal lag length according to information criteria and FPE.
 """
-function varselect(datamat, maxlag, constant, trend; print = false)
+function varselect(Y, maxlag, constant, trend; print = false)
     critname = ["FPE", "AIC", "HQIC", "SIC"]
     crit = Array{Float64}(4, maxlag)
     for lag in 1:maxlag
-        dmat = datamat[(maxlag+1-lag):end, :]
-        nobs, K, T, Z, B, U, SigmaU, SigmaB, seB = var_ols(dmat, lag, constant=constant, trend=trend)
+        dmat = Y[(maxlag+1-lag):end, :]
+        nobs, K, T, Z, B, U, SigmaU, SigmaB, seB = var_ols(dmat, lag, constant, trend)
         infcrit = criteria(T, K, lag, SigmaU)
         crit[1, lag] = infcrit["FPE"]
         crit[2, lag] = infcrit["AIC"]

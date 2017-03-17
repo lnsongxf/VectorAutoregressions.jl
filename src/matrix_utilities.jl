@@ -8,22 +8,22 @@ Arguments
 * `X` - the `Matrix` or `Vector` to be lagged (`X` may be a `DataFrame` as well).
 * `p` - the number of lags
 
-`X` should be of dimension T x K, where T is the number of observations (including presample values) and K is the number of endogenous variables.
-
 Returns
 -------
 * A matrix of dimension (T-p) x (K*p)
 """
-function lag_matrix{T<:Array}(X::T, p::Int)
-    if isa(X, Vector)
-        X = reshape(X, length(X), 1)
-    end
+function lag_matrix{T<:Matrix}(X::T, p::Int)
     Traw, K = size(X)
     Xlag = zeros(Traw - p, K*p)
     for ii = 1:p
        Xlag[1:(Traw - p), (K*(ii - 1) + 1):(K*ii)] = X[(p+1-ii):(Traw-ii), 1:K]
     end
     return Xlag
+end
+
+function lag_matrix{T<:Vector}(X::T, p::Int)
+    X2 = reshape(X, length(X), 1)
+    return lag_matrix(X2, p)
 end
 
 function lag_matrix{T<:DataFrame}(X::T, p::Int)
