@@ -1,5 +1,6 @@
 immutable ResidualCorrelationTests
     U::Matrix{Float64}
+    h::Int
     Q::Float64
     pvalQ::Float64
     F::Float64
@@ -13,7 +14,7 @@ immutable ResidualCorrelationTests
         U = v.U
         Q, dfQ, pvalQ = portmanteau_test(U, K, p, T, h)
         F, dfF1, dfF2, pvalF = bg_lm_test(Y, K, T, p, U, h)
-        new(U, Q, pvalQ, F, pvalF)
+        new(U, h, Q, pvalQ, F, pvalF)
     end
 end
 
@@ -62,4 +63,22 @@ function bg_lm_test(Y, K, T, p, U, h)
     F = ((det(SigmaU)/det(SigmaE))^(1/s) - 1)*(df2/df1)
     pval = 1 - cdf(FDist(df1, df2), F)
     return F, df1, df2, pval
+end
+
+function show(io::IO, rct::ResidualCorrelationTests)
+    println(io, " Residual Correlation Tests")
+    println(io)
+    println(io, " Multivariate portmanteau test")
+    println(io, " (Null is no autocorrelation)")
+    println(io, "-----------------------------------")
+    println(io, "  Q statistic:", lpad(string(round(rct.Q, 3)), 12))
+    println(io, "  P-value:    ", lpad(string(round(rct.pvalQ, 3)), 12))
+    println(io)
+    println(io)
+    println(io, " Multivariate Breusch–Godfrey test")
+    println(io, " (Null is no autocorrelation)")
+    println(io, "-----------------------------------")
+    println(io, "  F statistic:", lpad(string(round(rct.F, 3)), 12))
+    println(io, "  P-value:    ", lpad(string(round(rct.pvalF, 3)), 12))
+
 end
