@@ -10,6 +10,7 @@ import Base: show
 export
 #   Types
     VAR,
+    StabilityTest,
     ResidualCorrelationTests,
 
 #   Estimation functions
