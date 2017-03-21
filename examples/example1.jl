@@ -13,8 +13,7 @@ trend    = false
 varnames = string.(names(e1data2)[2:end])
 
 lagselect = varselect(datamat, 8, constant, trend)
-v = VAR(datamat, lagselect["HQIC"], constant, trend, varnames)
+v = VAR(datamat, lagselect["AIC"], constant, trend, varnames)
 stab_test = StabilityTest(v)
-
-# h = 4
-# wntest = ResidualCorrelationTests(v, h)
+h = 4
+wntest = ResidualCorrelationTests(v, h)
