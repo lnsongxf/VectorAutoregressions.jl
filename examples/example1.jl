@@ -1,6 +1,5 @@
 using VectorAutoregressions
 using DataFrames
-# using Distributions
 
 # Example from Lutkepohl (2005), Section 3.2.3, p.77
 e1data = readtable("e1data.csv")
@@ -16,4 +15,4 @@ lagselect = varselect(datamat, 8, constant, trend)
 v = VAR(datamat, lagselect["AIC"], constant, trend, varnames)
 stab_test = StabilityTest(v)
 h = 4
-wntest = ResidualCorrelationTests(v, h)
+corr_test = ResidualCorrelationTests(v, h)

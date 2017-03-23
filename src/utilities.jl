@@ -39,7 +39,7 @@ function varselect(Y, maxlag, constant, trend; print = false)
     crit = Array{Float64}(4, maxlag)
     for lag in 1:maxlag
         dmat = Y[(maxlag+1-lag):end, :]
-        nobs, K, T, Z, B, U, SigmaU, SigmaB, seB = var_ols(dmat, lag, constant, trend)
+        nobs, K, T, Z, B, A, U, SigmaU, SigmaB, seB = var_ols(dmat, lag, constant, trend)
         infcrit = criteria(T, K, lag, SigmaU)
         crit[1, lag] = infcrit["FPE"]
         crit[2, lag] = infcrit["AIC"]

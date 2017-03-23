@@ -14,18 +14,19 @@ immutable VAR
     varnames::Vector{String}
     Z::Matrix{Float64}
     B::Matrix{Float64}
+    A::Array{Float64, 3}
     U::Matrix{Float64}
     SigmaU::Matrix{Float64}
     seB::Matrix{Float64}
     LL::Float64
 
     function VAR(Y::Matrix{Float64}, p::Int, constant::Bool, trend::Bool, varnames::Vector{String}=[""])
-        nobs, K, T, Z, B, U, SigmaU, SigmaB, seB = var_ols(Y, p, constant, trend)
+        nobs, K, T, Z, B, A, U, SigmaU, SigmaB, seB = var_ols(Y, p, constant, trend)
         if varnames == [""]
             varnames = [string("Y$i") for i in 1:K]
         end
         LL = loglik(T, K, SigmaU)
-        new(Y, K, T, p, constant, trend, varnames, Z, B, U, SigmaU, seB, LL)
+        new(Y, K, T, p, constant, trend, varnames, Z, B, A, U, SigmaU, seB, LL)
     end
 end # VAR type definition
 
@@ -42,9 +43,10 @@ function var_ols(Y::Matrix{Float64}, p::Int, constant::Bool, trend::Bool)
     nparam = size(Z, 2)
     Y = Y[p+1:end, :]
     B = (Z'*Z)\(Z'*Y) # each column corresponds to an equation
+    A = reshape(B[constant+trend+1:end, :]', K, K, p)
     U = Y - Z*B
     SigmaU = (U'*U)/(T - nparam)
     SigmaB = kron(SigmaU, inv(Z'*Z))  # following Lutkepohl(2005) p.80
     seB = sqrt(reshape(diag(SigmaB), nparam, K))
-    return nobs, K, T, Z, B, U, SigmaU, SigmaB, seB
+    return nobs, K, T, Z, B, A, U, SigmaU, SigmaB, seB
 end
