@@ -16,3 +16,10 @@ v = VAR(datamat, lagselect["AIC"], constant, trend, varnames)
 stab_test = StabilityTest(v)
 h = 4
 corr_test = ResidualCorrelationTests(v, h)
+
+P = chol(v.SigmaU)'
+w = v.U*inv(P)
+b1 = sum(w.^3, 1)/v.T
+lambda_s = v.T*b1*b1'/6
+b2 = sum(w.^4, 1)/v.T
+lamda_k = v.T*(b2-3)*(b2-3)'/24
